@@ -82,6 +82,17 @@ let ReviewsService = class ReviewsService {
             .leftJoinAndSelect('review.user', 'user')
             .getOne();
     }
+    async test(id, userId) {
+        const rawVideoList = await this.reviewRepository
+            .createQueryBuilder('review')
+            .leftJoinAndSelect('review.user', 'user')
+            .addSelect('')
+            .where('review.video.id = :id', { id })
+            .andWhere('user.id != :id', { id: userId })
+            .orderBy('review.createdAt', 'DESC')
+            .getMany();
+        console.log(rawVideoList);
+    }
     async findThisVidAndUserReview(video, user) {
         if (user === 'guest') {
             user = await this.userRepository.findOne({ name: 'guest' });
@@ -91,6 +102,7 @@ let ReviewsService = class ReviewsService {
             .leftJoinAndSelect('review.user', 'user')
             .where({ video })
             .andWhere('user.id != :id', { id: user.id })
+            .orderBy('review.createdAt', 'DESC')
             .getMany();
         const videoList = [];
         if (rawVideoList.length) {

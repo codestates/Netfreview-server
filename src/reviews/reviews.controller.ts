@@ -34,6 +34,11 @@ export class ReviewsController {
     this.usersService = usersService;
   }
 
+  @Get('test')
+  async test() {
+    await this.reviewsService.test(1, 1);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('like')
   async likeThisReview(@Body() body, @Request() req) {

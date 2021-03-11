@@ -109,8 +109,8 @@ export class UsersController {
     const { user } = req;
     const userinfo = await this.usersService.updateUserInfo(user, payload);
     return Object.assign({
-      user : userinfo,
-      message : '회원정보가 수정되었습니다.'
+      user: userinfo,
+      message: '회원정보가 수정되었습니다.',
     });
   }
 

@@ -90,6 +90,19 @@ export class ReviewsService {
       .getOne();
   }
 
+  async test(id, userId) {
+    const rawVideoList = await this.reviewRepository
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.user', 'user')
+      .addSelect('')
+      .where('review.video.id = :id', { id })
+      .andWhere('user.id != :id', { id: userId })
+      .orderBy('review.createdAt', 'DESC')
+      .getMany();
+
+    console.log(rawVideoList);
+  }
+
   // eslint-disable-next-line @typescript-eslint/ban-types
   async findThisVidAndUserReview(video: any, user) {
     if (user === 'guest') {
@@ -100,6 +113,7 @@ export class ReviewsService {
       .leftJoinAndSelect('review.user', 'user')
       .where({ video })
       .andWhere('user.id != :id', { id: user.id })
+      .orderBy('review.createdAt', 'DESC')
       .getMany();
     const videoList = [];
 

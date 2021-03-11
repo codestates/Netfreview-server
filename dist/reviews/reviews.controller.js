@@ -31,6 +31,9 @@ let ReviewsController = class ReviewsController {
         this.tokenService = tokenService;
         this.usersService = usersService;
     }
+    async test() {
+        await this.reviewsService.test(1, 1);
+    }
     async likeThisReview(body, req) {
         const user = req.user;
         const review = await this.reviewsService.findReviewWithId(body.reviewId);
@@ -89,6 +92,12 @@ let ReviewsController = class ReviewsController {
         return await this.reviewsService.patchReview(user, video, body);
     }
 };
+__decorate([
+    common_1.Get('test'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ReviewsController.prototype, "test", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Post('like'),

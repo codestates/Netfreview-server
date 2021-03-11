@@ -83,8 +83,15 @@ let VideosController = class VideosController {
                 videoIds.push(video.id);
             }
             const aboutThisVid = await this.videosService.getUserAboutThis(videoIds, userId);
+            const returnVideoList = aboutThisVid.slice(0, 4);
+            const aboutThisVidList = [];
+            for (const rawVideo of returnVideoList) {
+                const avgRating = await this.reviewsService.getThisVidReviewAvgRate(rawVideo.id);
+                const video = Object.assign(Object.assign({}, rawVideo), { rating: avgRating });
+                aboutThisVidList.push(video);
+            }
             return Object.assign({
-                videoList: aboutThisVid.slice(0, 4),
+                videoList: aboutThisVidList,
             });
         }
         else if (path === 'main') {
