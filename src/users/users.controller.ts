@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   Query,
@@ -66,6 +67,20 @@ export class UsersController {
     const top5UserList = this.usersService.getTope5ReviewKing();
   }
 
+  @Get('userinfo/:userId')
+  async getUser(@Param('userId') userId: string) {
+    if (!userId) throw new BadRequestException('userId 값을 주세요');
+    const user = await this.usersService.findUserWithUserId(userId);
+    delete user.password;
+    if (!userId) throw new BadRequestException('유효하지 않은 유저입니다.');
+    const video = await this.videosService.getUserVideo(userId);
+
+    return Object.assign({
+      ...user,
+      video,
+    });
+  }
+
   @Get('refresh')
   async refresh(@Request() req: any): Promise<ResponseWithToken> {
     console.log(req.cookies);
@@ -81,7 +96,7 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('userinfo')
+  @Get('myinfo')
   async getProfile(@Req() req: any): Promise<any> {
     const user = req.user;
     if (!user) throw new BadRequestException('해당 유저가 없습니다!');

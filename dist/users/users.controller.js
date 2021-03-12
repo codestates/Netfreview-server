@@ -52,6 +52,16 @@ let UsersController = class UsersController {
     async getReviewKing() {
         const top5UserList = this.usersService.getTope5ReviewKing();
     }
+    async getUser(userId) {
+        if (!userId)
+            throw new common_1.BadRequestException('userId 값을 주세요');
+        const user = await this.usersService.findUserWithUserId(userId);
+        delete user.password;
+        if (!userId)
+            throw new common_1.BadRequestException('유효하지 않은 유저입니다.');
+        const video = await this.videosService.getUserVideo(userId);
+        return Object.assign(Object.assign(Object.assign({}, user), { video }));
+    }
     async refresh(req) {
         console.log(req.cookies);
         const { refreshToken } = req.cookies;
@@ -127,6 +137,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getReviewKing", null);
 __decorate([
+    common_1.Get('userinfo/:userId'),
+    __param(0, common_1.Param('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUser", null);
+__decorate([
     common_1.Get('refresh'),
     __param(0, common_1.Request()),
     __metadata("design:type", Function),
@@ -135,7 +152,7 @@ __decorate([
 ], UsersController.prototype, "refresh", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
-    common_1.Get('userinfo'),
+    common_1.Get('myinfo'),
     __param(0, common_1.Req()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

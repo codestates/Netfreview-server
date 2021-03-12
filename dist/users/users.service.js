@@ -105,10 +105,8 @@ let UsersService = class UsersService {
         const userList = await this.userRepository
             .createQueryBuilder('user')
             .leftJoinAndSelect('user.reviews', 'reviews')
-            .leftJoinAndSelect('reviews.video', 'video')
-            .limit(5)
-            .getMany();
-        console.log(userList[0]);
+            .getOne();
+        console.log(userList);
     }
 };
 UsersService = __decorate([

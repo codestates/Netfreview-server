@@ -3257,7 +3257,7 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.service.ts": {
-        "version": "e90c9815f86ca3007f60ad2902157c92dcfd00ffee7af242ad33c30b3ca072bb",
+        "version": "41b62bb3ec6cbafe5d429ffca897c2e346e09700910aafac9fb07d787d65c022",
         "signature": "025f30234061520a3d0805e0ec030bd2bf515ce42b9416cfc9d8a0a61f7a1516",
         "affectsGlobalScope": false
       },
@@ -3442,8 +3442,8 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "c73b53672f170b51bea3b37c1d088bfa7abaab103533c10f25f0fac57ee9c532",
-        "signature": "dc49f997eabd60181810417ff766d18223f06cf030b9164dc93aa487f37573d0",
+        "version": "195fa2a4f1afe7c567faff79d77c0c8b8101c474b63f8d996aa278331746ca16",
+        "signature": "ee2ebd775359356a76ca6afb59973076b43e0827c6e4daab70c0ed0171cfa363",
         "affectsGlobalScope": false
       },
       "../src/users/users.module.ts": {
