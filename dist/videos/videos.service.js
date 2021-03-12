@@ -90,6 +90,18 @@ let VideosService = class VideosService {
         }
         return myVideoBox;
     }
+    async getUserVideoWithReview(userId) {
+        const reviews = await this.videoRepository
+            .createQueryBuilder('video')
+            .leftJoinAndSelect('video.reviews', 'reviews')
+            .leftJoin('reviews.user', 'user')
+            .addSelect('AVG(reviews.rating)', 'avg')
+            .where('user.id =:id', { id: userId })
+            .groupBy('video.id')
+            .orderBy('avg', 'DESC')
+            .getRawMany();
+        return reviews;
+    }
     async getUserAboutThis(videoIds, userId) {
         const userCountObj = {};
         const similarUserIdBox = [];

@@ -54,10 +54,31 @@ let UsersController = class UsersController {
             throw new common_1.BadRequestException('userId 값을 주세요');
         const user = await this.usersService.findUserWithUserId(userId);
         delete user.password;
+        delete user.email;
         if (!userId)
             throw new common_1.BadRequestException('유효하지 않은 유저입니다.');
-        const video = await this.videosService.getUserVideo(userId);
-        return Object.assign(Object.assign(Object.assign({}, user), { video }));
+        const rawVideoList = await this.videosService.getUserVideoWithReview(userId);
+        const videoList = [];
+        for (const video of rawVideoList) {
+            const newVideo = {
+                id: video.video_id,
+                title: video.video_title,
+                description: video.video_description,
+                director: video.video_director,
+                actor: video.video_actor,
+                ageLimit: video.video_ageLimit,
+                releaseYear: video.video_releaseYer,
+                posterUrl: video.video_posterUrl,
+                bannerUrl: video.video_bannerUrl,
+                netflixUrl: video.video_netflixUrl,
+                type: video.video_type,
+                createdAt: video.video_createdAt,
+                updatedAt: video.video_updatedAt,
+                rating: video.avg,
+            };
+            videoList.push(newVideo);
+        }
+        return Object.assign(Object.assign(Object.assign({}, user), { videoList }));
     }
     async refresh(req) {
         console.log(req.cookies);
