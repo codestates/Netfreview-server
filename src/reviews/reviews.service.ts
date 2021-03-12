@@ -90,15 +90,16 @@ export class ReviewsService {
       .getOne();
   }
 
-  async test(id, userId) {
+  async test(id) {
     const rawVideoList = await this.reviewRepository
       .createQueryBuilder('review')
-      .leftJoinAndSelect('review.user', 'user')
-      .addSelect('')
-      .where('review.video.id = :id', { id })
-      .andWhere('user.id != :id', { id: userId })
-      .orderBy('review.createdAt', 'DESC')
-      .getMany();
+      .select('*')
+      .addSelect('COUNT(*)', 'likeCount')
+      .where('reviewId = review.id')
+      .from(LikeReview, 'like')
+      .groupBy('review.id')
+      .orderBy('likeCount', 'DESC')
+      .getRawMany();
 
     console.log(rawVideoList);
   }
@@ -108,22 +109,68 @@ export class ReviewsService {
     if (user === 'guest') {
       user = await this.userRepository.findOne({ name: 'guest' });
     }
+    // const rawVideoList = await this.reviewRepository
+    //   .createQueryBuilder('review')
+    //   .leftJoinAndSelect('review.user', 'user')
+    //   .where({ video })
+    //   .andWhere('user.id != :id', { id: user.id })
+    //   .orderBy('review.createdAt', 'DESC')
+    //   .getMany();
+
     const rawVideoList = await this.reviewRepository
       .createQueryBuilder('review')
-      .leftJoinAndSelect('review.user', 'user')
+      // .select('*')
+      // // .select('review.video')
+      // // .where('review.video.id =:id', { id: video.id })
+      // .addSelect('COUNT(*)', 'likeCount')
+      // .where({ video })
+      // .andWhere('reviewId = review.id')
+      // .leftJoin(LikeReview, 'like')
+      // .groupBy('review.id')
+      // .orderBy('likeCount', 'DESC')
+      // .getRawMany();
+      .select('review')
+      .addSelect('COUNT(likeReview.id) as likeCount')
+      .leftJoin('review.likeReview', 'likeReview')
       .where({ video })
-      .andWhere('user.id != :id', { id: user.id })
-      .orderBy('review.createdAt', 'DESC')
-      .getMany();
+      .groupBy('review.id')
+      .orderBy('likeCount', 'DESC')
+      .getRawMany();
+
+    // .createQueryBuilder('platformUsers')
+    // .select('platformUsers.id')
+    // .addSelect('COUNT(userLikes.id) as userLikesCount')
+    // .leftJoin('platformUsers.userLikes', 'userLikes')
+    // .groupBy('platformUsers.id')
+    // .orderBy('userLikesCount', 'DESC')
+    // .execute();
+
+    console.log(rawVideoList);
+    const userReview = await this.reviewRepository.findOne({ user, video });
+    // console.log(userReview);
     const videoList = [];
 
     if (rawVideoList.length) {
-      for (const review of rawVideoList) {
-        delete review.user.password;
-        const likeCount = await this.likeRepository.count({ review });
+      for (const rawReview of rawVideoList) {
+        const review = await this.reviewRepository
+          .createQueryBuilder('review')
+          .select('review')
+          .where('review.id =:id', { id: rawReview.id })
+          .getOne();
+
+        // console.log(review);
+
+        if (userReview && rawReview.id === userReview.id) continue;
+        const likeCount = rawReview.likeCount;
         const isLike = await this.likeRepository.count({ user, review });
         videoList.push({
-          ...review,
+          id: rawReview.review_id,
+          rating: rawReview.review_rating,
+          text: rawReview.review_text,
+          createdAt: rawReview.review_createdAt,
+          updatedAt: rawReview.review_updatedAt,
+          userId: rawReview.review_userId,
+          videoId: rawReview.review_videoId,
           likeCount,
           isLike,
         });
@@ -132,21 +179,19 @@ export class ReviewsService {
       return { videoList, userReview: null };
     }
 
-    const rawUserReview = await this.reviewRepository.findOne({ video, user });
-    if (!rawUserReview) {
+    if (!userReview) {
       return {
         videoList,
         userReview: null,
       };
     }
 
-    const userReview = {
-      ...rawUserReview,
-      likeCount: await this.likeRepository.count({ review: rawUserReview }),
-      isLike: await this.likeRepository.count({ user, review: rawUserReview }),
-      reviewId: rawUserReview.id,
+    const resultUserReview = {
+      ...userReview,
+      likeCount: await this.likeRepository.count({ review: userReview }),
+      isLike: await this.likeRepository.count({ user, review: userReview }),
     };
-    return { videoList, userReview };
+    return { videoList, resultUserReview };
   }
 
   async saveReview(user: User, video: Video, req: ReviewDto) {

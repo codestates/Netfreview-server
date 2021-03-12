@@ -32,7 +32,7 @@ let ReviewsController = class ReviewsController {
         this.usersService = usersService;
     }
     async test() {
-        await this.reviewsService.test(1, 1);
+        await this.reviewsService.test(1);
     }
     async likeThisReview(body, req) {
         const user = req.user;
@@ -64,15 +64,15 @@ let ReviewsController = class ReviewsController {
         if (!accessToken) {
             myuser = 'guest';
         }
-        const { videoList, userReview, } = await this.reviewsService.findThisVidAndUserReview(video, myuser);
+        const { videoList, resultUserReview, } = await this.reviewsService.findThisVidAndUserReview(video, myuser);
         let totalCount = videoList.length;
-        if (userReview) {
+        if (resultUserReview) {
             totalCount++;
         }
         return Object.assign({
             totalCount,
             reviewList: videoList.slice(8 * (page - 1), 8 * page),
-            myReview: userReview,
+            myReview: resultUserReview || null,
         });
     }
     async saveReview(body, request) {

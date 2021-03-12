@@ -73,8 +73,11 @@ let UsersService = class UsersService {
             const [column, data] = entry;
             if (column === 'password') {
                 password = await bcrypt_1.hash(data, 10);
+                user.password = password;
             }
-            user[column] = data;
+            else {
+                user[column] = data;
+            }
         }
         const modifyUser = {
             id: user.id,

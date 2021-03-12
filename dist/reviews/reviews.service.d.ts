@@ -13,13 +13,16 @@ export declare class ReviewsService {
     getThisVidReviewAvgRate(videoId: number): Promise<number>;
     addOrRemoveLike(user: User, review: Review): Promise<any>;
     findReviewWithId(reviewId: number): Promise<Review>;
-    test(id: any, userId: any): Promise<void>;
+    test(id: any): Promise<void>;
     findThisVidAndUserReview(video: any, user: any): Promise<{
         videoList: any[];
-        userReview: {
+        userReview: any;
+        resultUserReview?: undefined;
+    } | {
+        videoList: any[];
+        resultUserReview: {
             likeCount: number;
             isLike: number;
-            reviewId: number;
             id: number;
             rating: number;
             text: string;
@@ -29,6 +32,7 @@ export declare class ReviewsService {
             createdAt: Date;
             updatedAt: Date;
         };
+        userReview?: undefined;
     }>;
     saveReview(user: User, video: Video, req: ReviewDto): Promise<any>;
     deleteReview(id: number): Promise<void>;

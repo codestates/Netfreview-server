@@ -36,7 +36,7 @@ export class ReviewsController {
 
   @Get('test')
   async test() {
-    await this.reviewsService.test(1, 1);
+    await this.reviewsService.test(1);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -82,20 +82,22 @@ export class ReviewsController {
     if (!accessToken) {
       myuser = 'guest';
     }
+    // console.log(myuser);
 
     const {
       videoList,
-      userReview,
+      resultUserReview,
     } = await this.reviewsService.findThisVidAndUserReview(video, myuser);
+    // console.log(videoList);
     let totalCount = videoList.length;
-    if (userReview) {
+    if (resultUserReview) {
       totalCount++;
     }
 
     return Object.assign({
       totalCount,
       reviewList: videoList.slice(8 * (page - 1), 8 * page),
-      myReview: userReview,
+      myReview: resultUserReview || null,
     });
   }
 

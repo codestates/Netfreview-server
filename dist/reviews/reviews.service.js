@@ -82,15 +82,16 @@ let ReviewsService = class ReviewsService {
             .leftJoinAndSelect('review.user', 'user')
             .getOne();
     }
-    async test(id, userId) {
+    async test(id) {
         const rawVideoList = await this.reviewRepository
             .createQueryBuilder('review')
-            .leftJoinAndSelect('review.user', 'user')
-            .addSelect('')
-            .where('review.video.id = :id', { id })
-            .andWhere('user.id != :id', { id: userId })
-            .orderBy('review.createdAt', 'DESC')
-            .getMany();
+            .select('*')
+            .addSelect('COUNT(*)', 'likeCount')
+            .where('reviewId = review.id')
+            .from(LikeReview_entity_1.LikeReview, 'like')
+            .groupBy('review.id')
+            .orderBy('likeCount', 'DESC')
+            .getRawMany();
         console.log(rawVideoList);
     }
     async findThisVidAndUserReview(video, user) {
@@ -99,33 +100,51 @@ let ReviewsService = class ReviewsService {
         }
         const rawVideoList = await this.reviewRepository
             .createQueryBuilder('review')
-            .leftJoinAndSelect('review.user', 'user')
+            .select('review')
+            .addSelect('COUNT(likeReview.id) as likeCount')
+            .leftJoin('review.likeReview', 'likeReview')
             .where({ video })
-            .andWhere('user.id != :id', { id: user.id })
-            .orderBy('review.createdAt', 'DESC')
-            .getMany();
+            .groupBy('review.id')
+            .orderBy('likeCount', 'DESC')
+            .getRawMany();
+        console.log(rawVideoList);
+        const userReview = await this.reviewRepository.findOne({ user, video });
         const videoList = [];
         if (rawVideoList.length) {
-            for (const review of rawVideoList) {
-                delete review.user.password;
-                const likeCount = await this.likeRepository.count({ review });
+            for (const rawReview of rawVideoList) {
+                const review = await this.reviewRepository
+                    .createQueryBuilder('review')
+                    .select('review')
+                    .where('review.id =:id', { id: rawReview.id })
+                    .getOne();
+                if (userReview && rawReview.id === userReview.id)
+                    continue;
+                const likeCount = rawReview.likeCount;
                 const isLike = await this.likeRepository.count({ user, review });
-                videoList.push(Object.assign(Object.assign({}, review), { likeCount,
-                    isLike }));
+                videoList.push({
+                    id: rawReview.review_id,
+                    rating: rawReview.review_rating,
+                    text: rawReview.review_text,
+                    createdAt: rawReview.review_createdAt,
+                    updatedAt: rawReview.review_updatedAt,
+                    userId: rawReview.review_userId,
+                    videoId: rawReview.review_videoId,
+                    likeCount,
+                    isLike,
+                });
             }
         }
         else {
             return { videoList, userReview: null };
         }
-        const rawUserReview = await this.reviewRepository.findOne({ video, user });
-        if (!rawUserReview) {
+        if (!userReview) {
             return {
                 videoList,
                 userReview: null,
             };
         }
-        const userReview = Object.assign(Object.assign({}, rawUserReview), { likeCount: await this.likeRepository.count({ review: rawUserReview }), isLike: await this.likeRepository.count({ user, review: rawUserReview }), reviewId: rawUserReview.id });
-        return { videoList, userReview };
+        const resultUserReview = Object.assign(Object.assign({}, userReview), { likeCount: await this.likeRepository.count({ review: userReview }), isLike: await this.likeRepository.count({ user, review: userReview }) });
+        return { videoList, resultUserReview };
     }
     async saveReview(user, video, req) {
         const isExist = await this.reviewRepository.findOne({ user, video });
