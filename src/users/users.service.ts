@@ -75,8 +75,10 @@ export class UsersService {
       const [column, data] = entry;
       if (column === 'password') {
         password = await hash(data, 10);
+        user.password = password;
+      } else {
+        user[column] = data;
       }
-      user[column] = data;
     }
     const modifyUser = {
       id: user.id,

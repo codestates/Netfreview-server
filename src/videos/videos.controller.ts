@@ -103,8 +103,17 @@ export class VideosController {
         videoIds,
         userId,
       );
+      const returnVideoList = aboutThisVid.slice(0, 4);
+      const aboutThisVidList = [];
+      for (const rawVideo of returnVideoList) {
+        const avgRating = await this.reviewsService.getThisVidReviewAvgRate(
+          rawVideo.id,
+        );
+        const video = { ...rawVideo, rating: avgRating };
+        aboutThisVidList.push(video);
+      }
       return Object.assign({
-        videoList: aboutThisVid.slice(0, 4),
+        videoList: aboutThisVidList,
       });
     } else if (path === 'main') {
       // 메인에서 요청
