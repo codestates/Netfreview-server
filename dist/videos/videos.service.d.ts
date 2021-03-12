@@ -13,6 +13,7 @@ export declare class VideosService {
     getThisVideoWithId(videoId: any): Promise<Video>;
     getThisVidGenreWithId(videoId: number): Promise<Genre[]>;
     getUserVideo(userId: string): Promise<any[]>;
+    getUserVideoWithReview(userId: string): Promise<any[]>;
     getUserAboutThis(videoIds: number[], userId: string): Promise<any[]>;
     getSearchVideo(q: string): Promise<Video[]>;
     getAllVideoWithReview(): Promise<Video[]>;

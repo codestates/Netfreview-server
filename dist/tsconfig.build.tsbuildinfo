@@ -2892,8 +2892,8 @@
         "affectsGlobalScope": true
       },
       "../src/videos/videos.service.ts": {
-        "version": "68c57e5bb6c910f75adb686c2f91f818b19bf0b0539f93e174cb4ec2e43f38d1",
-        "signature": "0ae28ac75c269932eaba3b24288129080695639d7948d542a57e02ac2f0dae10",
+        "version": "5b33e7525ef912047ada1382263fe582d36bfa40d861150a67ce8542f388f187",
+        "signature": "4d73f75e5258a19d6f5913214976ec62b2c298e2ceed20c88caa8657b228cb65",
         "affectsGlobalScope": false
       },
       "../node_modules/@nestjs/passport/dist/abstract.strategy.d.ts": {
@@ -3442,7 +3442,7 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "2c9a01ed01b1b9805772cdb8108c70de4fcedbdf46f08e8fbb78a88ee723c97a",
+        "version": "1687937708fbab5e3e1fc9e4cf90819343085bd205ab7b3089119b080ea1c795",
         "signature": "605751677efdd265f60aff29e9ad868cd84138f892495e8594e93e52da928054",
         "affectsGlobalScope": false
       },
