@@ -67,17 +67,14 @@ let UsersService = class UsersService {
         await this.userRepository.delete({ id });
     }
     async updateUserInfo(user, dto) {
-        const entries = Object.entries(dto);
-        console.log(entries);
-        for (const entry of entries) {
-            console.log(entry[0]);
-            this.userRepository
-                .createQueryBuilder('user')
-                .update()
-                .set({})
-                .where('id = :id', { id: user.id })
-                .execute();
-        }
+        if (dto.password)
+            dto.password = await bcrypt_1.hash(dto.password, 10);
+        this.userRepository
+            .createQueryBuilder('user')
+            .update()
+            .set(dto)
+            .where('id = :id', { id: user.id })
+            .execute();
         return await this.userRepository.findOne({ id: user.id });
     }
     async generateRandomNickname() {

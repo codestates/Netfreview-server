@@ -67,53 +67,14 @@ export class UsersService {
   }
 
   async updateUserInfo(user: User, dto: UpdateUserInfoDto): Promise<any> {
-    const entries = Object.entries(dto);
-    console.log(entries);
+    if (dto.password) dto.password = await hash(dto.password, 10);
+    this.userRepository
+      .createQueryBuilder('user')
+      .update()
+      .set(dto)
+      .where('id = :id', { id: user.id })
+      .execute();
 
-    for (const entry of entries) {
-      console.log(entry[0]);
-      this.userRepository
-        .createQueryBuilder('user')
-        .update()
-        .set({})
-        .where('id = :id', { id: user.id })
-        .execute();
-    }
-    // } else {
-    //   dto = { profileUrl, introduction, nickname };
-
-    //   this.userRepository
-    //     .createQueryBuilder('user')
-    //     .update()
-    //     .set({ profileUrl, introduction, nickname })
-    //     .where('id = :id', { id: user.id })
-    //     .execute();
-    // }
-
-    // let password;
-
-    // for (const entry of entries) {
-    //   const [column, data] = entry;
-    //   if (column === 'password') {
-    //     password = await hash(data, 10);
-    //     user.password = password;
-    //   } else {
-    //     user[column] = data;
-    //   }
-    // }
-    // //!! 여기 수정해야함!!!
-    // const modifyUser = {
-    //   id: user.id,
-    //   email: user.email,
-    //   name: user.name,
-    //   password,
-    //   profileUrl: user.profileUrl,
-    //   introduction: user.introduction,
-    //   nickname: user.nickname,
-    // };
-
-    // this.userRepository.save(modifyUser);
-    // delete modifyUser.password;
     return await this.userRepository.findOne({ id: user.id });
   }
 
