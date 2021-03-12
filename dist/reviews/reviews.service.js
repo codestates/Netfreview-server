@@ -107,27 +107,29 @@ let ReviewsService = class ReviewsService {
             .groupBy('review.id')
             .orderBy('likeCount', 'DESC')
             .getRawMany();
-        console.log(rawVideoList);
         const userReview = await this.reviewRepository.findOne({ user, video });
         const videoList = [];
         if (rawVideoList.length) {
             for (const rawReview of rawVideoList) {
-                const review = await this.reviewRepository
-                    .createQueryBuilder('review')
-                    .select('review')
-                    .where('review.id =:id', { id: rawReview.id })
-                    .getOne();
+                const review = await this.reviewRepository.findOne({
+                    id: rawReview.review_id,
+                });
                 if (userReview && rawReview.id === userReview.id)
                     continue;
                 const likeCount = rawReview.likeCount;
                 const isLike = await this.likeRepository.count({ user, review });
+                console.log(isLike);
+                const reviewUser = await this.userRepository.findOne({
+                    id: rawReview.review_userId,
+                });
+                delete reviewUser.password;
                 videoList.push({
                     id: rawReview.review_id,
                     rating: rawReview.review_rating,
                     text: rawReview.review_text,
                     createdAt: rawReview.review_createdAt,
                     updatedAt: rawReview.review_updatedAt,
-                    userId: rawReview.review_userId,
+                    user: reviewUser,
                     videoId: rawReview.review_videoId,
                     likeCount,
                     isLike,
