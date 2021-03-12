@@ -33,6 +33,15 @@ export class ReviewsController {
     this.tokenService = tokenService;
     this.usersService = usersService;
   }
+  @Get('reviewKing')
+  async getReviewKing() {
+    const kingData = await this.reviewsService.getReviewKing();
+
+    return Object.assign({
+      user: kingData.user,
+      video: kingData.video,
+    });
+  }
 
   @Get('test')
   async test() {

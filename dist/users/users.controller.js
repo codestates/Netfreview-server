@@ -49,9 +49,6 @@ let UsersController = class UsersController {
             message: '로그인이 성공적으로 되었습니다.',
         };
     }
-    async getReviewKing() {
-        const top5UserList = this.usersService.getTope5ReviewKing();
-    }
     async getUser(userId) {
         if (!userId)
             throw new common_1.BadRequestException('userId 값을 주세요');
@@ -130,12 +127,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "signIn", null);
-__decorate([
-    common_1.Get('reviewKing'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "getReviewKing", null);
 __decorate([
     common_1.Get('userinfo/:userId'),
     __param(0, common_1.Param('userId')),

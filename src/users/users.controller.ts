@@ -62,10 +62,11 @@ export class UsersController {
     };
   }
 
-  @Get('reviewKing')
-  async getReviewKing(): Promise<any> {
-    const top5UserList = this.usersService.getTope5ReviewKing();
-  }
+  // @Get('reviewKing')
+  // async getReviewKing(): Promise<any> {
+  //   const reviewKingId = await this.usersService.getTope5ReviewKing();
+  //   console.log(reviewKingId);
+  // }
 
   @Get('userinfo/:userId')
   async getUser(@Param('userId') userId: string) {

@@ -68,29 +68,17 @@ let UsersService = class UsersService {
     }
     async updateUserInfo(user, dto) {
         const entries = Object.entries(dto);
-        let password;
+        console.log(entries);
         for (const entry of entries) {
-            const [column, data] = entry;
-            if (column === 'password') {
-                password = await bcrypt_1.hash(data, 10);
-                user.password = password;
-            }
-            else {
-                user[column] = data;
-            }
+            console.log(entry[0]);
+            this.userRepository
+                .createQueryBuilder('user')
+                .update()
+                .set({})
+                .where('id = :id', { id: user.id })
+                .execute();
         }
-        const modifyUser = {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            password,
-            profileUrl: user.profileUrl,
-            introduction: user.introduction,
-            nickname: user.nickname,
-        };
-        this.userRepository.save(modifyUser);
-        delete modifyUser.password;
-        return modifyUser;
+        return await this.userRepository.findOne({ id: user.id });
     }
     async generateRandomNickname() {
         let nickname = string_util_1.createRandomString(10);
@@ -100,13 +88,6 @@ let UsersService = class UsersService {
             isExist = await this.findUserWithNickname(nickname);
         }
         return nickname;
-    }
-    async getTope5ReviewKing() {
-        const userList = await this.userRepository
-            .createQueryBuilder('user')
-            .leftJoinAndSelect('user.reviews', 'reviews')
-            .getOne();
-        console.log(userList);
     }
 };
 UsersService = __decorate([
