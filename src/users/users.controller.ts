@@ -172,6 +172,27 @@ export class UsersController {
     return;
   }
 
+  // @Get('google/redirect')
+  // @UseGuards(GoogleAuthGuard)
+  // async googleLoginCallback(
+  //   @Request() req,
+  //   @Response({ passthrough: true }) res,
+  // ): Promise<ResponseWithToken> {
+  //   const {
+  //     user,
+  //     tokens: { refreshToken },
+  //   } = req.user;
+  //   await this.usersService.updateLastLogin(user.id);
+
+  //   res.cookie('refreshToken', refreshToken, {
+  //     domain: '',
+  //     path: '/',
+  //     secure: true,
+  //     // httpOnly: true,
+  //     sameSite: 'None',
+  //   });
+  //   return res.redirect('http://localhost:3000'); // 배포후에는 https://netfreview.com
+  // }
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async googleLoginCallback(
@@ -180,10 +201,9 @@ export class UsersController {
   ): Promise<ResponseWithToken> {
     const {
       user,
-      tokens: { refreshToken },
+      tokens: { accessToken, refreshToken },
     } = req.user;
     await this.usersService.updateLastLogin(user.id);
-
     res.cookie('refreshToken', refreshToken, {
       domain: '',
       path: '/',
@@ -191,7 +211,7 @@ export class UsersController {
       // httpOnly: true,
       sameSite: 'None',
     });
-    return res.redirect('http://localhost:3000'); // 배포후에는 https://netfreview.com
+    return res.redirect(`http://localhost:3000/oauth/?token=${accessToken}`); // 배포후에는 https://netfreview.com
   }
 
   @Post('pw-find')
