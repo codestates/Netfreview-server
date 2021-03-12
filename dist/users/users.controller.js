@@ -123,7 +123,7 @@ let UsersController = class UsersController {
         return;
     }
     async googleLoginCallback(req, res) {
-        const { user, tokens: { refreshToken }, } = req.user;
+        const { user, tokens: { accessToken, refreshToken }, } = req.user;
         await this.usersService.updateLastLogin(user.id);
         res.cookie('refreshToken', refreshToken, {
             domain: '',
@@ -131,7 +131,7 @@ let UsersController = class UsersController {
             secure: true,
             sameSite: 'None',
         });
-        return res.redirect('http://localhost:3000');
+        return res.redirect(`http://localhost:3000/oauth/?token=${accessToken}`);
     }
     async sendTemporaryPassword(body) {
         const { email } = body;

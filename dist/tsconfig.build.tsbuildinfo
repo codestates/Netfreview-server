@@ -3442,7 +3442,7 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "1687937708fbab5e3e1fc9e4cf90819343085bd205ab7b3089119b080ea1c795",
+        "version": "e0d7321ce851f9b2d5de37e1f667affbacd441e62b1901a419480f2ba8811a31",
         "signature": "605751677efdd265f60aff29e9ad868cd84138f892495e8594e93e52da928054",
         "affectsGlobalScope": false
       },
