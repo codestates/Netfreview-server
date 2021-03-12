@@ -137,6 +137,7 @@ export class ReviewsService {
       .orderBy('likeCount', 'DESC')
       .getRawMany();
 
+
     // .createQueryBuilder('platformUsers')
     // .select('platformUsers.id')
     // .addSelect('COUNT(userLikes.id) as userLikesCount')
@@ -154,14 +155,14 @@ export class ReviewsService {
           id: rawReview.review_id,
         });
 
-        if (userReview && rawReview.id === userReview.id) continue;
+        if (userReview && rawReview.review_id === userReview.id) continue;
         const likeCount = rawReview.likeCount;
         const isLike = await this.likeRepository.count({ user, review });
-        console.log(isLike);
         const reviewUser = await this.userRepository.findOne({
           id: rawReview.review_userId,
         });
         delete reviewUser.password;
+
         videoList.push({
           id: rawReview.review_id,
           rating: rawReview.review_rating,

@@ -1,20 +1,25 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
+  Query,
   Request,
   Response,
   UseGuards,
 } from '@nestjs/common';
+import { query } from 'express';
 import { GoogleAuthGuard } from 'src/auth/guards/google-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
 import { TokenService } from 'src/auth/token.service';
 import { User } from 'src/entity/User.entity';
 import { MailService } from 'src/mail/mail.service';
+import { VideosService } from 'src/videos/videos.service';
 import { ResponseWithToken } from './interfaces/responseWithToken.interface';
 import { UsersService } from './users.service';
 
@@ -24,10 +29,12 @@ export class UsersController {
     private usersService: UsersService,
     private tokenService: TokenService,
     private mailServcie: MailService,
+    private videosService: VideosService,
   ) {
     this.usersService = usersService;
     this.tokenService = tokenService;
     this.mailServcie = mailServcie;
+    this.videosService = videosService;
   }
 
   @UseGuards(LocalAuthGuard)
@@ -55,6 +62,11 @@ export class UsersController {
     };
   }
 
+  @Get('reviewKing')
+  async getReviewKing(): Promise<any> {
+    const top5UserList = this.usersService.getTope5ReviewKing()
+  }
+
   @Get('refresh')
   async refresh(@Request() req: any): Promise<ResponseWithToken> {
     console.log(req.cookies);
@@ -69,10 +81,20 @@ export class UsersController {
     };
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('userinfo')
-  getProfile(@Request() req): User {
-    return req.user;
+  @Get('userinfo/:userId')
+  async getProfile(@Param('userId') userId: string): Promise<any> {
+    if (!userId)
+      throw new BadRequestException('보내주신 id값이 잘못되었습니다.');
+
+    const user = await this.usersService.findUserWithUserId(userId);
+
+    if (!user) throw new BadRequestException('해당 유저가 없습니다!');
+
+    const videoList = await this.videosService.getUserVideo(userId);
+    return Object.assign({
+      ...user,
+      videoList,
+    });
   }
 
   @UseGuards(JwtAuthGuard)

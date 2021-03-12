@@ -114,11 +114,10 @@ let ReviewsService = class ReviewsService {
                 const review = await this.reviewRepository.findOne({
                     id: rawReview.review_id,
                 });
-                if (userReview && rawReview.id === userReview.id)
+                if (userReview && rawReview.review_id === userReview.id)
                     continue;
                 const likeCount = rawReview.likeCount;
                 const isLike = await this.likeRepository.count({ user, review });
-                console.log(isLike);
                 const reviewUser = await this.userRepository.findOne({
                     id: rawReview.review_userId,
                 });
