@@ -12,7 +12,6 @@ import {
   Response,
   UseGuards,
 } from '@nestjs/common';
-import { query } from 'express';
 import { GoogleAuthGuard } from 'src/auth/guards/google-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
@@ -22,6 +21,8 @@ import { MailService } from 'src/mail/mail.service';
 import { VideosService } from 'src/videos/videos.service';
 import { ResponseWithToken } from './interfaces/responseWithToken.interface';
 import { UsersService } from './users.service';
+import { ResponseWithTokenSignin } from './interfaces/responseWithTokenSignin.interface';
+import { UpdateUserInfoDto } from './dto/UpdateUserInfoDto';
 
 @Controller('users')
 export class UsersController {
@@ -42,7 +43,7 @@ export class UsersController {
   async signIn(
     @Request() req,
     @Response({ passthrough: true }) res,
-  ): Promise<ResponseWithToken> {
+  ): Promise<ResponseWithTokenSignin> {
     const { user } = req;
     await this.usersService.updateLastLogin(user.id);
     const accessToken = await this.tokenService.generateAccessToken(user);
@@ -58,6 +59,7 @@ export class UsersController {
 
     return {
       data: { accessToken },
+      user,
       message: '로그인이 성공적으로 되었습니다.',
     };
   }
@@ -81,8 +83,8 @@ export class UsersController {
     };
   }
 
-  @Get('userinfo/:userId')
-  async getProfile(@Param('userId') userId: string): Promise<any> {
+  @Get('userinfo')
+  async getProfile(@Query('userId') userId: string): Promise<any> {
     if (!userId)
       throw new BadRequestException('보내주신 id값이 잘못되었습니다.');
 
@@ -91,6 +93,7 @@ export class UsersController {
     if (!user) throw new BadRequestException('해당 유저가 없습니다!');
 
     const videoList = await this.videosService.getUserVideo(userId);
+    delete user.password;
     return Object.assign({
       ...user,
       videoList,
