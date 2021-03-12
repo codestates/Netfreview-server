@@ -46,7 +46,6 @@ let UsersController = class UsersController {
         });
         return {
             data: { accessToken },
-            user,
             message: '로그인이 성공적으로 되었습니다.',
         };
     }
@@ -62,15 +61,11 @@ let UsersController = class UsersController {
             message: 'accessToken이 발급 되었습니다.',
         };
     }
-    async getProfile(userId) {
-        if (!userId)
-            throw new common_1.BadRequestException('보내주신 id값이 잘못되었습니다.');
-        const user = await this.usersService.findUserWithUserId(userId);
+    async getProfile(req) {
+        const user = req.user;
         if (!user)
             throw new common_1.BadRequestException('해당 유저가 없습니다!');
-        const videoList = await this.videosService.getUserVideo(userId);
-        delete user.password;
-        return Object.assign(Object.assign(Object.assign({}, user), { videoList }));
+        return user;
     }
     async signOut(req, res) {
         const { user } = req;
@@ -139,10 +134,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "refresh", null);
 __decorate([
+    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Get('userinfo'),
-    __param(0, common_1.Query('userId')),
+    __param(0, common_1.Req()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getProfile", null);
 __decorate([

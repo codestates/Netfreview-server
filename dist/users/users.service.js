@@ -102,7 +102,13 @@ let UsersService = class UsersService {
         return nickname;
     }
     async getTope5ReviewKing() {
-        console.log();
+        const userList = await this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.reviews', 'reviews')
+            .leftJoinAndSelect('reviews.video', 'video')
+            .limit(5)
+            .getMany();
+        console.log(userList[0]);
     }
 };
 UsersService = __decorate([

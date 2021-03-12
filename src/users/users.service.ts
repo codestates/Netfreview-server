@@ -107,12 +107,14 @@ export class UsersService {
   }
 
   async getTope5ReviewKing() {
-    // const userList = await this.userRepository.createQueryBuilder('user')
-    // .select('user')
-    // .leftJoinAndSelect('user.review', 'reviews')
-    // .limit(5)
-    // .getMany();
+    const userList = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.reviews', 'reviews')
+      .leftJoinAndSelect('reviews.video', 'video')
+      // .addSelect('SUM(review.rating) as sum')
+      .limit(5)
+      .getMany();
 
-    console.log();
+    console.log(userList[0]);
   }
 }

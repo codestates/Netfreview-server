@@ -3257,7 +3257,7 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.service.ts": {
-        "version": "e47caf9dcf58c4b728e0383aac0c174b54cfefcea31dc40ad5e0994cfc8ec70f",
+        "version": "e90c9815f86ca3007f60ad2902157c92dcfd00ffee7af242ad33c30b3ca072bb",
         "signature": "025f30234061520a3d0805e0ec030bd2bf515ce42b9416cfc9d8a0a61f7a1516",
         "affectsGlobalScope": false
       },
@@ -3441,14 +3441,9 @@
         "signature": "923238071045bd3e3324c26b36e720976bbe0003638f057ad7d1cff0d9db64cd",
         "affectsGlobalScope": false
       },
-      "../src/users/interfaces/responsewithtokensignin.interface.ts": {
-        "version": "2d9e6e12e374cd60c57092ab03d366b9e7342319a7035f9504f26edc6b88144d",
-        "signature": "bb65fdefac04f22169461a4f00e37f7459ecb6a638fcd0fe998c872f48cca229",
-        "affectsGlobalScope": false
-      },
       "../src/users/users.controller.ts": {
-        "version": "b31c56b2efee67751212b5cbd9ca8b64e68b353d19d3d06ed242fafdc7b331ff",
-        "signature": "ca4249a4ef2ea4937d77ed465a60751caf1087cff46b364e546fe28124f59ea0",
+        "version": "c73b53672f170b51bea3b37c1d088bfa7abaab103533c10f25f0fac57ee9c532",
+        "signature": "dc49f997eabd60181810417ff766d18223f06cf030b9164dc93aa487f37573d0",
         "affectsGlobalScope": false
       },
       "../src/users/users.module.ts": {
@@ -5359,6 +5354,11 @@
       "../src/reviews/dto/savereviewdto.ts": {
         "version": "540e202462b9651105e45bb2f28818b7f30cd0c33ef1310dca4d9c2d35d48bb9",
         "signature": "cbdf9758c23b76482a384ae2249b905281177ad8168bf517eed75032fb97d63a",
+        "affectsGlobalScope": false
+      },
+      "../src/users/interfaces/responsewithtokensignin.interface.ts": {
+        "version": "2d9e6e12e374cd60c57092ab03d366b9e7342319a7035f9504f26edc6b88144d",
+        "signature": "bb65fdefac04f22169461a4f00e37f7459ecb6a638fcd0fe998c872f48cca229",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/anymatch/index.d.ts": {
@@ -11018,9 +11018,7 @@
         "../src/auth/token.service.ts",
         "../src/entity/user.entity.ts",
         "../src/mail/mail.service.ts",
-        "../src/users/dto/updateuserinfodto.ts",
         "../src/users/interfaces/responsewithtoken.interface.ts",
-        "../src/users/interfaces/responsewithtokensignin.interface.ts",
         "../src/users/users.service.ts",
         "../src/videos/videos.service.ts"
       ],
@@ -16312,7 +16310,6 @@
         "../src/entity/user.entity.ts",
         "../src/mail/mail.service.ts",
         "../src/users/interfaces/responsewithtoken.interface.ts",
-        "../src/users/interfaces/responsewithtokensignin.interface.ts",
         "../src/users/users.service.ts",
         "../src/videos/videos.service.ts"
       ],
