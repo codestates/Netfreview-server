@@ -137,7 +137,6 @@ export class ReviewsService {
       .orderBy('likeCount', 'DESC')
       .getRawMany();
 
-
     // .createQueryBuilder('platformUsers')
     // .select('platformUsers.id')
     // .addSelect('COUNT(userLikes.id) as userLikesCount')

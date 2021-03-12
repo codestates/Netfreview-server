@@ -64,7 +64,7 @@ export class UsersController {
 
   @Get('reviewKing')
   async getReviewKing(): Promise<any> {
-    const top5UserList = this.usersService.getTope5ReviewKing()
+    const top5UserList = this.usersService.getTope5ReviewKing();
   }
 
   @Get('refresh')
