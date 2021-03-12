@@ -185,13 +185,14 @@ let VideosService = class VideosService {
     async getLessReviewVid() {
         const videoList = await this.videoRepository
             .createQueryBuilder('video')
-            .select('video')
+            .select('video.id')
+            .addSelect('COUNT(review.id) as count')
             .leftJoin('video.reviews', 'review')
-            .addSelect(`COUNT('reviews')`, 'count')
             .groupBy('video.id')
             .orderBy('count')
             .limit(5)
             .getRawMany();
+        console.log(videoList);
         return videoList;
     }
     async getTop5ReviewVid() {

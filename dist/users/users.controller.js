@@ -20,15 +20,18 @@ const local_auth_guard_1 = require("../auth/guards/local-auth.guard");
 const token_service_1 = require("../auth/token.service");
 const User_entity_1 = require("../entity/User.entity");
 const mail_service_1 = require("../mail/mail.service");
+const videos_service_1 = require("../videos/videos.service");
 const users_service_1 = require("./users.service");
 let UsersController = class UsersController {
-    constructor(usersService, tokenService, mailServcie) {
+    constructor(usersService, tokenService, mailServcie, videosService) {
         this.usersService = usersService;
         this.tokenService = tokenService;
         this.mailServcie = mailServcie;
+        this.videosService = videosService;
         this.usersService = usersService;
         this.tokenService = tokenService;
         this.mailServcie = mailServcie;
+        this.videosService = videosService;
     }
     async signIn(req, res) {
         const { user } = req;
@@ -46,6 +49,9 @@ let UsersController = class UsersController {
             message: '로그인이 성공적으로 되었습니다.',
         };
     }
+    async getReviewKing() {
+        const top5UserList = this.usersService.getTope5ReviewKing();
+    }
     async refresh(req) {
         console.log(req.cookies);
         const { refreshToken } = req.cookies;
@@ -55,8 +61,14 @@ let UsersController = class UsersController {
             message: 'accessToken이 발급 되었습니다.',
         };
     }
-    getProfile(req) {
-        return req.user;
+    async getProfile(userId) {
+        if (!userId)
+            throw new common_1.BadRequestException('보내주신 id값이 잘못되었습니다.');
+        const user = await this.usersService.findUserWithUserId(userId);
+        if (!user)
+            throw new common_1.BadRequestException('해당 유저가 없습니다!');
+        const videoList = await this.videosService.getUserVideo(userId);
+        return Object.assign(Object.assign(Object.assign({}, user), { videoList }));
     }
     async signOut(req, res) {
         const { user } = req;
@@ -112,6 +124,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "signIn", null);
 __decorate([
+    common_1.Get('reviewKing'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getReviewKing", null);
+__decorate([
     common_1.Get('refresh'),
     __param(0, common_1.Request()),
     __metadata("design:type", Function),
@@ -119,12 +137,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "refresh", null);
 __decorate([
-    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
-    common_1.Get('userinfo'),
-    __param(0, common_1.Request()),
+    common_1.Get('userinfo/:userId'),
+    __param(0, common_1.Param('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", User_entity_1.User)
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getProfile", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
@@ -185,7 +202,8 @@ UsersController = __decorate([
     common_1.Controller('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService,
         token_service_1.TokenService,
-        mail_service_1.MailService])
+        mail_service_1.MailService,
+        videos_service_1.VideosService])
 ], UsersController);
 exports.UsersController = UsersController;
 //# sourceMappingURL=users.controller.js.map

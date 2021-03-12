@@ -19,7 +19,7 @@ let GoogleStrategy = class GoogleStrategy extends passport_1.PassportStrategy(pa
         super({
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_SECRET,
-            callbackURL: 'https://www.gettoday4.click/users/google/redirect',
+            callbackURL: 'https://server.netfreview.com/users/google/redirect',
             scope: ['profile', 'email'],
         });
         this.authService = authService;

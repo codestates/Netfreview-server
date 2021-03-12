@@ -13,7 +13,6 @@ export class UsersService {
   ) {
     this.userRepository = userRepository;
   }
-
   async findUserWithUserId(userId: string): Promise<User> {
     return await this.userRepository.findOne({ where: { id: userId } });
   }
@@ -80,6 +79,7 @@ export class UsersService {
         user[column] = data;
       }
     }
+    //!! 여기 수정해야함!!!
     const modifyUser = {
       id: user.id,
       email: user.email,
@@ -104,5 +104,15 @@ export class UsersService {
       isExist = await this.findUserWithNickname(nickname);
     }
     return nickname;
+  }
+
+  async getTope5ReviewKing() {
+    // const userList = await this.userRepository.createQueryBuilder('user')
+    // .select('user')
+    // .leftJoinAndSelect('user.review', 'reviews')
+    // .limit(5)
+    // .getMany();
+
+    console.log();
   }
 }

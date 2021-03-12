@@ -101,6 +101,9 @@ let UsersService = class UsersService {
         }
         return nickname;
     }
+    async getTope5ReviewKing() {
+        console.log();
+    }
 };
 UsersService = __decorate([
     common_1.Injectable(),

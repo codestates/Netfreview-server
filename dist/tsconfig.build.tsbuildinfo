@@ -2892,7 +2892,7 @@
         "affectsGlobalScope": true
       },
       "../src/videos/videos.service.ts": {
-        "version": "cf4ef7e7b2a791c3e97a4267f7e05825f136ab1af1acc7cf4e6a5190135d0b3e",
+        "version": "68c57e5bb6c910f75adb686c2f91f818b19bf0b0539f93e174cb4ec2e43f38d1",
         "signature": "0ae28ac75c269932eaba3b24288129080695639d7948d542a57e02ac2f0dae10",
         "affectsGlobalScope": false
       },
@@ -3237,7 +3237,7 @@
         "affectsGlobalScope": false
       },
       "../src/reviews/reviews.service.ts": {
-        "version": "7848500b3c6925aca32fee1f7c940362996895bf8f7b8ba260a204bc1deb5257",
+        "version": "547aa017db8f0d9558e0f0794832ac5d9d3cd19c656a4b7a0317a5188c166035",
         "signature": "702f3fc42e4ebf07d7565a42841ede080ad9a62328954702264411fba8dc8a7d",
         "affectsGlobalScope": false
       },
@@ -3257,8 +3257,8 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.service.ts": {
-        "version": "da2bc73fc1f8a4735e6d2c21ae762f32a13e59c43cb1449fa8391c0b888e8836",
-        "signature": "0d733a25ce167a35d5f90de9d8e5f28348317cfa6bb8c5f7af8a56efef7b95e9",
+        "version": "e47caf9dcf58c4b728e0383aac0c174b54cfefcea31dc40ad5e0994cfc8ec70f",
+        "signature": "025f30234061520a3d0805e0ec030bd2bf515ce42b9416cfc9d8a0a61f7a1516",
         "affectsGlobalScope": false
       },
       "../node_modules/@types/jsonwebtoken/index.d.ts": {
@@ -3442,12 +3442,12 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "d3a952ace84167a7eae9c83523b4d896eab5e4cd2a8ae50a9192fb7051f0e578",
-        "signature": "7a4688606aa1d46cb7accadf775448d1643d072dc0a0872932d4b1e2cd3df797",
+        "version": "77c2bfab0292364f50322db36e437312d3dac0005ddc7400816ae509804d6080",
+        "signature": "65d6319d22345cffe9a2b8eee8b6002ce723753c2797fd9d98f3d7c4b5669031",
         "affectsGlobalScope": false
       },
       "../src/users/users.module.ts": {
-        "version": "32395b0b462704a55640b541b7fe3fcf0ff43f66fb0ceabea7192acb80ec24f3",
+        "version": "c6cddbecba3dc76e4201f5761b613736a66ce345db0e4a3d54b82faccbaf8ab8",
         "signature": "aa1725e38b5a0b4009f6a74f296f173e7926c119a60454dbd2e523861735df69",
         "affectsGlobalScope": false
       },
@@ -3487,7 +3487,7 @@
         "affectsGlobalScope": false
       },
       "../src/auth/strategies/google.strategy.ts": {
-        "version": "9866a2b9a60deac73b212094f7e9f313cd2b392a744beab97bcee284f44b2a30",
+        "version": "a94965ba78cac3b420110e958ce5f8bbf11244e62695216439821be638420ab7",
         "signature": "42c468b7d8580b1156a05bfecf1a525a23fee7ecc8a76615558c45107e40a69f",
         "affectsGlobalScope": false
       },
@@ -11004,6 +11004,7 @@
       ],
       "../src/users/users.controller.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@types/express/index.d.ts",
         "../src/auth/guards/google-auth.guard.ts",
         "../src/auth/guards/jwt-auth.guard.ts",
         "../src/auth/guards/local-auth.guard.ts",
@@ -11011,7 +11012,8 @@
         "../src/entity/user.entity.ts",
         "../src/mail/mail.service.ts",
         "../src/users/interfaces/responsewithtoken.interface.ts",
-        "../src/users/users.service.ts"
+        "../src/users/users.service.ts",
+        "../src/videos/videos.service.ts"
       ],
       "../src/users/users.module.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
@@ -11020,7 +11022,8 @@
         "../src/entity/user.entity.ts",
         "../src/mail/mail.service.ts",
         "../src/users/users.controller.ts",
-        "../src/users/users.service.ts"
+        "../src/users/users.service.ts",
+        "../src/videos/videos.module.ts"
       ],
       "../src/users/users.service.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
@@ -16297,7 +16300,8 @@
         "../src/entity/user.entity.ts",
         "../src/mail/mail.service.ts",
         "../src/users/interfaces/responsewithtoken.interface.ts",
-        "../src/users/users.service.ts"
+        "../src/users/users.service.ts",
+        "../src/videos/videos.service.ts"
       ],
       "../src/users/users.service.ts": [
         "../node_modules/typeorm/index.d.ts",
