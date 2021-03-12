@@ -67,30 +67,15 @@ let UsersService = class UsersService {
         await this.userRepository.delete({ id });
     }
     async updateUserInfo(user, dto) {
-        const entries = Object.entries(dto);
-        let password;
-        for (const entry of entries) {
-            const [column, data] = entry;
-            if (column === 'password') {
-                password = await bcrypt_1.hash(data, 10);
-                user.password = password;
-            }
-            else {
-                user[column] = data;
-            }
-        }
-        const modifyUser = {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            password,
-            profileUrl: user.profileUrl,
-            introduction: user.introduction,
-            nickname: user.nickname,
-        };
-        this.userRepository.save(modifyUser);
-        delete modifyUser.password;
-        return modifyUser;
+        if (dto.password)
+            dto.password = await bcrypt_1.hash(dto.password, 10);
+        this.userRepository
+            .createQueryBuilder('user')
+            .update()
+            .set(dto)
+            .where('id = :id', { id: user.id })
+            .execute();
+        return await this.userRepository.findOne({ id: user.id });
     }
     async generateRandomNickname() {
         let nickname = string_util_1.createRandomString(10);
@@ -100,9 +85,6 @@ let UsersService = class UsersService {
             isExist = await this.findUserWithNickname(nickname);
         }
         return nickname;
-    }
-    async getTope5ReviewKing() {
-        console.log();
     }
 };
 UsersService = __decorate([

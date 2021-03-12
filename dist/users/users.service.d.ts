@@ -14,5 +14,4 @@ export declare class UsersService {
     deleteUser(id: string): Promise<void>;
     updateUserInfo(user: User, dto: UpdateUserInfoDto): Promise<any>;
     generateRandomNickname(): Promise<string>;
-    getTope5ReviewKing(): Promise<void>;
 }

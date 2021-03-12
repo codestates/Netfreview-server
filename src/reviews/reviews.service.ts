@@ -22,6 +22,24 @@ export class ReviewsService {
     this.videoRepository = videoRepository;
   }
 
+  async getReviewKing() {
+    const test = await this.reviewRepository
+      .createQueryBuilder('review')
+      .select('review')
+      .addSelect('COUNT(likeReview.id) as likeCount')
+      .leftJoin('review.likeReview', 'likeReview')
+      .groupBy('review.id')
+      .orderBy('likeCount', 'DESC')
+      .getOne();
+
+    return await this.reviewRepository
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.user', 'user')
+      .leftJoinAndSelect('review.video', 'video')
+      .where('review.id =:id', { id: test.id })
+      .getOne();
+  }
+
   async getThisVidReviewAvgRate(videoId: number) {
     // 비디오 컨트롤러에서 평균 별점을 낼 때 사용하는 로직
     const avgRating = await this.reviewRepository

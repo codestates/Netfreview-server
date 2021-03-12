@@ -8,11 +8,11 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   Request,
   Response,
   UseGuards,
 } from '@nestjs/common';
-import { query } from 'express';
 import { GoogleAuthGuard } from 'src/auth/guards/google-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
@@ -62,9 +62,24 @@ export class UsersController {
     };
   }
 
-  @Get('reviewKing')
-  async getReviewKing(): Promise<any> {
-    const top5UserList = this.usersService.getTope5ReviewKing();
+  // @Get('reviewKing')
+  // async getReviewKing(): Promise<any> {
+  //   const reviewKingId = await this.usersService.getTope5ReviewKing();
+  //   console.log(reviewKingId);
+  // }
+
+  @Get('userinfo/:userId')
+  async getUser(@Param('userId') userId: string) {
+    if (!userId) throw new BadRequestException('userId 값을 주세요');
+    const user = await this.usersService.findUserWithUserId(userId);
+    delete user.password;
+    if (!userId) throw new BadRequestException('유효하지 않은 유저입니다.');
+    const video = await this.videosService.getUserVideo(userId);
+
+    return Object.assign({
+      ...user,
+      video,
+    });
   }
 
   @Get('refresh')
@@ -81,20 +96,12 @@ export class UsersController {
     };
   }
 
-  @Get('userinfo/:userId')
-  async getProfile(@Param('userId') userId: string): Promise<any> {
-    if (!userId)
-      throw new BadRequestException('보내주신 id값이 잘못되었습니다.');
-
-    const user = await this.usersService.findUserWithUserId(userId);
-
+  @UseGuards(JwtAuthGuard)
+  @Get('myinfo')
+  async getProfile(@Req() req: any): Promise<any> {
+    const user = req.user;
     if (!user) throw new BadRequestException('해당 유저가 없습니다!');
-
-    const videoList = await this.videosService.getUserVideo(userId);
-    return Object.assign({
-      ...user,
-      videoList,
-    });
+    return user;
   }
 
   @UseGuards(JwtAuthGuard)

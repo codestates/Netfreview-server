@@ -67,32 +67,15 @@ export class UsersService {
   }
 
   async updateUserInfo(user: User, dto: UpdateUserInfoDto): Promise<any> {
-    const entries = Object.entries(dto);
-    let password;
+    if (dto.password) dto.password = await hash(dto.password, 10);
+    this.userRepository
+      .createQueryBuilder('user')
+      .update()
+      .set(dto)
+      .where('id = :id', { id: user.id })
+      .execute();
 
-    for (const entry of entries) {
-      const [column, data] = entry;
-      if (column === 'password') {
-        password = await hash(data, 10);
-        user.password = password;
-      } else {
-        user[column] = data;
-      }
-    }
-    //!! 여기 수정해야함!!!
-    const modifyUser = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      password,
-      profileUrl: user.profileUrl,
-      introduction: user.introduction,
-      nickname: user.nickname,
-    };
-
-    this.userRepository.save(modifyUser);
-    delete modifyUser.password;
-    return modifyUser;
+    return await this.userRepository.findOne({ id: user.id });
   }
 
   async generateRandomNickname(): Promise<string> {
@@ -106,13 +89,18 @@ export class UsersService {
     return nickname;
   }
 
-  async getTope5ReviewKing() {
-    // const userList = await this.userRepository.createQueryBuilder('user')
-    // .select('user')
-    // .leftJoinAndSelect('user.review', 'reviews')
-    // .limit(5)
-    // .getMany();
+  // 너무아까워 ㅠㅠㅠ 이거 ㅠㅠㅠㅠ
+  // async getTope5ReviewKing() {
+  //   const user = await this.userRepository
+  //     .createQueryBuilder('user')
+  //     .leftJoinAndSelect('user.reviews', 'reviews')
+  //     .leftJoinAndSelect('reviews.likeReview', 'likeReview')
+  //     .addSelect('COUNT(likeReview.id) as count')
+  //     .groupBy('user.id')
+  //     .orderBy('count', 'DESC')
+  //     .getOne();
 
-    console.log();
-  }
+  //   delete user.reviews[0].likeReview;
+  //   return user.id;
+  // }
 }

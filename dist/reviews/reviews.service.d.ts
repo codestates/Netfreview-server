@@ -10,6 +10,7 @@ export declare class ReviewsService {
     private userRepository;
     private videoRepository;
     constructor(reviewRepository: Repository<Review>, likeRepository: Repository<LikeReview>, userRepository: Repository<User>, videoRepository: Repository<Video>);
+    getReviewKing(): Promise<Review>;
     getThisVidReviewAvgRate(videoId: number): Promise<number>;
     addOrRemoveLike(user: User, review: Review): Promise<any>;
     findReviewWithId(reviewId: number): Promise<Review>;

@@ -11,9 +11,9 @@ export declare class UsersController {
     private videosService;
     constructor(usersService: UsersService, tokenService: TokenService, mailServcie: MailService, videosService: VideosService);
     signIn(req: any, res: any): Promise<ResponseWithToken>;
-    getReviewKing(): Promise<any>;
+    getUser(userId: string): Promise<any>;
     refresh(req: any): Promise<ResponseWithToken>;
-    getProfile(userId: string): Promise<any>;
+    getProfile(req: any): Promise<any>;
     signOut(req: any, res: any): Promise<string>;
     saveUser(user: User): Promise<string>;
     deleteUser(req: any): Promise<string>;

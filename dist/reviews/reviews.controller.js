@@ -31,6 +31,13 @@ let ReviewsController = class ReviewsController {
         this.tokenService = tokenService;
         this.usersService = usersService;
     }
+    async getReviewKing() {
+        const kingData = await this.reviewsService.getReviewKing();
+        return Object.assign({
+            user: kingData.user,
+            video: kingData.video,
+        });
+    }
     async test() {
         await this.reviewsService.test(1);
     }
@@ -92,6 +99,12 @@ let ReviewsController = class ReviewsController {
         return await this.reviewsService.patchReview(user, video, body);
     }
 };
+__decorate([
+    common_1.Get('reviewKing'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], ReviewsController.prototype, "getReviewKing", null);
 __decorate([
     common_1.Get('test'),
     __metadata("design:type", Function),
