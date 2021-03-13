@@ -114,7 +114,7 @@ let UsersController = class UsersController {
     }
     async updateUserInfo(req, payload) {
         const { user } = req;
-        const isUser = await this.usersService.findUserWithNickname(user.nickname);
+        const isUser = await this.usersService.findUserWithNickname(payload.nickname);
         if (isUser)
             throw new common_1.ConflictException('닉네임이 중복됩니다.');
         const userinfo = await this.usersService.updateUserInfo(user, payload);
