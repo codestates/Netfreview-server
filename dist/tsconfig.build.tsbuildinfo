@@ -2892,7 +2892,7 @@
         "affectsGlobalScope": true
       },
       "../src/videos/videos.service.ts": {
-        "version": "5b33e7525ef912047ada1382263fe582d36bfa40d861150a67ce8542f388f187",
+        "version": "fdb69d5f07057882d4c59d4266440d65527d0054c9367d2218c3fb756f10bcdf",
         "signature": "4d73f75e5258a19d6f5913214976ec62b2c298e2ceed20c88caa8657b228cb65",
         "affectsGlobalScope": false
       },
@@ -3307,8 +3307,8 @@
         "affectsGlobalScope": false
       },
       "../src/videos/videos.controller.ts": {
-        "version": "f87c54690cf09085f75371c56b6805cfbbde76f4292284b2c2f72213d8717507",
-        "signature": "037a7ad02f68915dd673e57c0b8f0a9baf3a8efc2162a27a97c3791eb1a6ed9e",
+        "version": "bf637299733432bcce51686bb89a881ac2935683efa55e24213414bc16d11213",
+        "signature": "8211b92c0082243d3127b0a58e765c6b3b14da414bf928504fc8ad3de3a790ac",
         "affectsGlobalScope": false
       },
       "../node_modules/@nestjs/config/dist/interfaces/config-factory.interface.d.ts": {
@@ -3422,7 +3422,7 @@
         "affectsGlobalScope": false
       },
       "../src/mail/mail.service.ts": {
-        "version": "a59367136705046805dbc1ce4477f605de370512377822e6849daf9062b5c9cd",
+        "version": "fed3d548d82644a72813ae00f22ca59a7bc9c59aa07522ba06012eb2d2a72585",
         "signature": "0ff1f56912dcad3c85221123c53efeb8cf0faf6b88637c38ed083f1182126776",
         "affectsGlobalScope": false
       },
@@ -3442,7 +3442,7 @@
         "affectsGlobalScope": false
       },
       "../src/users/users.controller.ts": {
-        "version": "e0d7321ce851f9b2d5de37e1f667affbacd441e62b1901a419480f2ba8811a31",
+        "version": "a30c27ef8276502228e22671e7df2291d1d944909a0c60aacb99c14840bc7c16",
         "signature": "605751677efdd265f60aff29e9ad868cd84138f892495e8594e93e52da928054",
         "affectsGlobalScope": false
       },
@@ -3522,7 +3522,7 @@
         "affectsGlobalScope": false
       },
       "../src/reviews/reviews.controller.ts": {
-        "version": "57feb0e3517cbb7bb5505548bd6b849f1aecce9fc0b3970bf3b09f6c8d24082e",
+        "version": "d21173e4cafa3590a4199e6d7a6c52c69e815ccc69a748048a9f5e1db0bfc15d",
         "signature": "c4e59476e9c52670ceb585d07cf8f3d4588394f3a0d1370c03780cfc799c851b",
         "affectsGlobalScope": false
       },

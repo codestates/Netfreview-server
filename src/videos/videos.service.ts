@@ -155,37 +155,6 @@ export class VideosService {
       }
     }
     return resultRecommandVideoBox;
-
-    // 추천하는 비디오 배열을 만들어 주는 로직 부분
-
-    // const genresBox = [];
-    // for (const id of videoIds) {
-    //   const genres = await this.getThisVidGenreWithId(id);
-    //   for (const genre of genres) {
-    //     if (!genresBox.includes(genre.name)) {
-    //       genresBox.push(genre.name);
-    //     }
-    //   }
-    // }
-
-    // const allVideos = await this.videoRepository
-    //   .createQueryBuilder('video')
-    //   .leftJoinAndSelect('video.genres', 'genre')
-    //   .getMany();
-
-    // const recommandVidBox = [];
-    // for (const video of allVideos) {
-    //   let isRecommand = true;
-    //   for (const genre of video.genres) {
-    //     if (genresBox.includes(genre.name)) {
-    //       isRecommand = false;
-    //     }
-    //   }
-    //   if (isRecommand) {
-    //     recommandVidBox.push(video);
-    //   }
-    // }
-    // return recommandVidBox;
   }
 
   async getSearchVideo(q: string) {
@@ -210,7 +179,6 @@ export class VideosService {
   async getAllVideoId() {
     const videoIdList = await this.videoRepository
       .createQueryBuilder('video')
-      // .select()
       .select('video.id')
       .getMany();
 
@@ -268,7 +236,5 @@ export class VideosService {
       .getRawMany();
 
     return videoList;
-
-    // return videoList;
   }
 }

@@ -36,6 +36,8 @@ export class ReviewsController {
   @Get('reviewKing')
   async getReviewKing() {
     const kingData = await this.reviewsService.getReviewKing();
+    delete kingData.user.password;
+    delete kingData.user.email;
 
     return Object.assign({
       user: kingData.user,
@@ -91,13 +93,11 @@ export class ReviewsController {
     if (!accessToken) {
       myuser = 'guest';
     }
-    // console.log(myuser);
 
     const {
       videoList,
       resultUserReview,
     } = await this.reviewsService.findThisVidAndUserReview(video, myuser);
-    // console.log(videoList);
     let totalCount = videoList.length;
     if (resultUserReview) {
       totalCount++;
