@@ -39,9 +39,10 @@ let UsersController = class UsersController {
         const accessToken = await this.tokenService.generateAccessToken(user);
         const refreshToken = await this.tokenService.generateRefreshToken(user);
         res.cookie('refreshToken', refreshToken, {
-            domain: '',
+            domain: 'netfreview.com',
             path: '/',
             secure: true,
+            httpsOnly: true,
             sameSite: 'None',
         });
         return {
@@ -126,12 +127,13 @@ let UsersController = class UsersController {
         const { user, tokens: { accessToken, refreshToken }, } = req.user;
         await this.usersService.updateLastLogin(user.id);
         res.cookie('refreshToken', refreshToken, {
-            domain: '',
+            domain: 'netfreview.com',
             path: '/',
             secure: true,
+            httpOnly: true,
             sameSite: 'None',
         });
-        return res.redirect(`http://localhost:3000/oauth/?token=${accessToken}`);
+        return res.redirect(`https://www.netfreview.com/oauth/?token=${accessToken}`);
     }
     async sendTemporaryPassword(body) {
         const { email } = body;

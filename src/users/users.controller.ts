@@ -7,7 +7,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   Req,
   Request,
   Response,
@@ -49,10 +48,10 @@ export class UsersController {
     const refreshToken = await this.tokenService.generateRefreshToken(user);
 
     res.cookie('refreshToken', refreshToken, {
-      domain: '',
+      domain: 'netfreview.com',
       path: '/',
       secure: true,
-      // httpOnly: true,
+      httpsOnly: true,
       sameSite: 'None',
     });
 
@@ -61,12 +60,6 @@ export class UsersController {
       message: '로그인이 성공적으로 되었습니다.',
     };
   }
-
-  // @Get('reviewKing')
-  // async getReviewKing(): Promise<any> {
-  //   const reviewKingId = await this.usersService.getTope5ReviewKing();
-  //   console.log(reviewKingId);
-  // }
 
   @Get('userinfo/:userId')
   async getUser(@Param('userId') userId: string) {
@@ -172,27 +165,6 @@ export class UsersController {
     return;
   }
 
-  // @Get('google/redirect')
-  // @UseGuards(GoogleAuthGuard)
-  // async googleLoginCallback(
-  //   @Request() req,
-  //   @Response({ passthrough: true }) res,
-  // ): Promise<ResponseWithToken> {
-  //   const {
-  //     user,
-  //     tokens: { refreshToken },
-  //   } = req.user;
-  //   await this.usersService.updateLastLogin(user.id);
-
-  //   res.cookie('refreshToken', refreshToken, {
-  //     domain: '',
-  //     path: '/',
-  //     secure: true,
-  //     // httpOnly: true,
-  //     sameSite: 'None',
-  //   });
-  //   return res.redirect('http://localhost:3000'); // 배포후에는 https://netfreview.com
-  // }
   @Get('google/redirect')
   @UseGuards(GoogleAuthGuard)
   async googleLoginCallback(
@@ -205,13 +177,15 @@ export class UsersController {
     } = req.user;
     await this.usersService.updateLastLogin(user.id);
     res.cookie('refreshToken', refreshToken, {
-      domain: '',
+      domain: 'netfreview.com',
       path: '/',
       secure: true,
-      // httpOnly: true,
+      httpOnly: true,
       sameSite: 'None',
     });
-    return res.redirect(`http://localhost:3000/oauth/?token=${accessToken}`); // 배포후에는 https://netfreview.com
+    return res.redirect(
+      `https://www.netfreview.com/oauth/?token=${accessToken}`,
+    );
   }
 
   @Post('pw-find')

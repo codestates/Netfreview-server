@@ -116,30 +116,6 @@ export class VideosController {
         videoList: aboutThisVidList,
       });
     } else if (path === 'main') {
-      // 메인에서 요청
-
-      // GET TOP5 VID
-      // for (const videoId of videoIdList) {
-      //   const avgRating = await this.reviewsService.getThisVidReviewAvgRate(
-      //     videoId.id,
-      //   );
-
-      //   videoBox.push({ ...videoId, rating: avgRating });
-      // }
-      // videoBox.sort((a, b) => b.rating - a.rating);
-      // const top5Vidbox = videoBox.slice(0, 5);
-      // videoBox.sort((a, b) => b.reviews.length - a.reviews.length);
-      // const mostReviewVid = videoBox.slice(0, 5);
-      // const notMostReviewVid = videoBox.slice(
-      //   videoBox.length - 5,
-      //   videoBox.length,
-      // );
-      // // 리뷰없는거 5개, 최다리뷰 5개
-      // [top5Vidbox, mostReviewVid, notMostReviewVid].forEach((el) => {
-      //   el.map((ele) => {
-      //     delete ele.reviews;
-      //   });
-      // });
       const videoList = await this.videosService.getManyReviewVid();
       const many5ReviewVidBox = [];
       for (const video of videoList) {
