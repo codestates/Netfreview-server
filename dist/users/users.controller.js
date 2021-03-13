@@ -54,11 +54,11 @@ let UsersController = class UsersController {
         if (!userId)
             throw new common_1.BadRequestException('userId 값을 주세요');
         const user = await this.usersService.findUserWithUserId(userId);
-        delete user.password;
-        delete user.email;
-        if (!userId)
+        if (!user)
             throw new common_1.BadRequestException('유효하지 않은 유저입니다.');
         const rawVideoList = await this.videosService.getUserVideoWithReview(userId);
+        delete user.password;
+        delete user.email;
         const videoList = [];
         for (const video of rawVideoList) {
             const newVideo = {
@@ -114,7 +114,7 @@ let UsersController = class UsersController {
     }
     async updateUserInfo(req, payload) {
         const { user } = req;
-        const isUser = await this.usersService.findUserWithNickname(user.nickname);
+        const isUser = await this.usersService.findUserWithNickname(payload.nickname);
         if (isUser)
             throw new common_1.ConflictException('닉네임이 중복됩니다.');
         const userinfo = await this.usersService.updateUserInfo(user, payload);

@@ -66,12 +66,12 @@ export class UsersController {
   async getUser(@Param('userId') userId: string) {
     if (!userId) throw new BadRequestException('userId 값을 주세요');
     const user = await this.usersService.findUserWithUserId(userId);
-    delete user.password;
-    delete user.email;
-    if (!userId) throw new BadRequestException('유효하지 않은 유저입니다.');
+    if (!user) throw new BadRequestException('유효하지 않은 유저입니다.');
     const rawVideoList = await this.videosService.getUserVideoWithReview(
       userId,
     );
+    delete user.password;
+    delete user.email;
     const videoList = [];
     for (const video of rawVideoList) {
       const newVideo = {
@@ -153,11 +153,10 @@ export class UsersController {
   @Patch()
   async updateUserInfo(@Request() req, @Body() payload): Promise<string> {
     const { user } = req;
-    const { nickname } = payload;
-    if (nickname && user.nickname !== nickname) {
-      const isUser = await this.usersService.findUserWithNickname(nickname);
-      if (isUser) throw new ConflictException('닉네임이 중복됩니다.');
-    }
+    const isUser = await this.usersService.findUserWithNickname(
+      payload.nickname,
+    );
+    if (isUser) throw new ConflictException('닉네임이 중복됩니다.');
     const userinfo = await this.usersService.updateUserInfo(user, payload);
     return Object.assign({
       user: userinfo,
