@@ -65,7 +65,7 @@ let VideosController = class VideosController {
             }
             const userId = user.id;
             const videoList = await this.videosService.getUserVideo(userId);
-            if (!videoList || videoList.length === 0) {
+            if (!videoList || videoList.length !== 0) {
                 const videoList3 = await this.videosService.getTop5ReviewVid();
                 const top5ReviewVidBox = [];
                 for (const video of videoList3) {
@@ -74,7 +74,7 @@ let VideosController = class VideosController {
                     top5ReviewVidBox.push(Object.assign(Object.assign({}, topVid), { rating: avgRating }));
                 }
                 return Object.assign({
-                    videoList: top5ReviewVidBox,
+                    videoList: top5ReviewVidBox.slice(0, 4),
                     message: '유저의 리뷰가 없어서 메인페이지 top5 비디오리스트를 보냄',
                 });
             }
@@ -150,16 +150,8 @@ let VideosController = class VideosController {
         }
         return Object.assign(Object.assign(Object.assign({}, rawVideoData), { rating: avgRating, genres: genreBucket }));
     }
-    async addVideo(body, req) {
-        const user = req.user;
-        const admin = await this.usersService.findUserWithName('admin');
-        delete admin.password;
-        if (user.id === admin.id && user.email === admin.email) {
-            return await this.videosService.addThisVideo(body);
-        }
-        else {
-            throw new common_1.UnauthorizedException('허가되지 않은 사용자입니다.');
-        }
+    async addVideo(body) {
+        return await this.videosService.addThisVideo(body);
     }
 };
 __decorate([
@@ -179,11 +171,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], VideosController.prototype, "getThisVideo", null);
 __decorate([
-    common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Post('add'),
-    __param(0, common_1.Body()), __param(1, common_1.Request()),
+    __param(0, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], VideosController.prototype, "addVideo", null);
 VideosController = __decorate([

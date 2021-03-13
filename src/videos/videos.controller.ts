@@ -74,10 +74,9 @@ export class VideosController {
       if (!accessToken) {
         throw new UnauthorizedException('로그인 후 이용 가능합니다.');
       }
-
       const userId = user.id;
       const videoList = await this.videosService.getUserVideo(userId);
-      if (!videoList || videoList.length === 0) {
+      if (!videoList || videoList.length !== 0) {
         const videoList3 = await this.videosService.getTop5ReviewVid();
         const top5ReviewVidBox = [];
         for (const video of videoList3) {
@@ -91,10 +90,11 @@ export class VideosController {
           });
         }
         return Object.assign({
-          videoList: top5ReviewVidBox,
+          videoList: top5ReviewVidBox.slice(0, 4),
           message: '유저의 리뷰가 없어서 메인페이지 top5 비디오리스트를 보냄',
         });
       }
+
       const videoIds = [];
       for (const video of videoList) {
         videoIds.push(video.id);
@@ -205,17 +205,22 @@ export class VideosController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('add')
-  async addVideo(@Body() body, @Request() req) {
-    const user = req.user;
-    const admin = await this.usersService.findUserWithName('admin');
-    delete admin.password;
+  // @UseGuards(JwtAuthGuard)
+  // @Post('add')
+  // async addVideo(@Body() body, @Request() req) {
+  //   const user = req.user;
+  //   const admin = await this.usersService.findUserWithName('admin');
+  //   delete admin.password;
 
-    if (user.id === admin.id && user.email === admin.email) {
-      return await this.videosService.addThisVideo(body);
-    } else {
-      throw new UnauthorizedException('허가되지 않은 사용자입니다.');
-    }
+  //   if (user.id === admin.id && user.email === admin.email) {
+  //     return await this.videosService.addThisVideo(body);
+  //   } else {
+  //     throw new UnauthorizedException('허가되지 않은 사용자입니다.');
+  //   }
+  // }
+
+  @Post('add')
+  async addVideo(@Body() body) {
+    return await this.videosService.addThisVideo(body);
   }
 }

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
@@ -152,6 +153,8 @@ export class UsersController {
   @Patch()
   async updateUserInfo(@Request() req, @Body() payload): Promise<string> {
     const { user } = req;
+    const isUser = await this.usersService.findUserWithNickname(user.nickname);
+    if (isUser) throw new ConflictException('닉네임이 중복됩니다.');
     const userinfo = await this.usersService.updateUserInfo(user, payload);
     return Object.assign({
       user: userinfo,

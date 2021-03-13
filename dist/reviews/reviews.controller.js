@@ -33,6 +33,8 @@ let ReviewsController = class ReviewsController {
     }
     async getReviewKing() {
         const kingData = await this.reviewsService.getReviewKing();
+        delete kingData.user.password;
+        delete kingData.user.email;
         return Object.assign({
             user: kingData.user,
             video: kingData.video,
