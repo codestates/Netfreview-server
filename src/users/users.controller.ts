@@ -66,12 +66,12 @@ export class UsersController {
   async getUser(@Param('userId') userId: string) {
     if (!userId) throw new BadRequestException('userId 값을 주세요');
     const user = await this.usersService.findUserWithUserId(userId);
-    delete user.password;
-    delete user.email;
-    if (!userId) throw new BadRequestException('유효하지 않은 유저입니다.');
+    if (!user) throw new BadRequestException('유효하지 않은 유저입니다.');
     const rawVideoList = await this.videosService.getUserVideoWithReview(
       userId,
     );
+    delete user.password;
+    delete user.email;
     const videoList = [];
     for (const video of rawVideoList) {
       const newVideo = {

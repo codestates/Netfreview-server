@@ -54,11 +54,11 @@ let UsersController = class UsersController {
         if (!userId)
             throw new common_1.BadRequestException('userId 값을 주세요');
         const user = await this.usersService.findUserWithUserId(userId);
-        delete user.password;
-        delete user.email;
-        if (!userId)
+        if (!user)
             throw new common_1.BadRequestException('유효하지 않은 유저입니다.');
         const rawVideoList = await this.videosService.getUserVideoWithReview(userId);
+        delete user.password;
+        delete user.email;
         const videoList = [];
         for (const video of rawVideoList) {
             const newVideo = {
