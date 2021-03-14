@@ -77,21 +77,21 @@ export class VideosController {
       const userId = user.id;
       const videoList = await this.videosService.getUserVideo(userId);
       if (!videoList || videoList.length === 0) {
-        const videoList3 = await this.videosService.getTop5ReviewVid();
-        const top5ReviewVidBox = [];
-        for (const video of videoList3) {
-          const topVid = await this.videosService.getThisVideoWithId(video.id);
-          const avgRating = await this.reviewsService.getThisVidReviewAvgRate(
-            video.id,
-          );
-          top5ReviewVidBox.push({
-            ...topVid,
-            rating: avgRating,
-          });
-        }
+        // const videoList3 = await this.videosService.getTop5ReviewVid();
+        // const top5ReviewVidBox = [];
+        // for (const video of videoList3) {
+        //   const topVid = await this.videosService.getThisVideoWithId(video.id);
+        //   const avgRating = await this.reviewsService.getThisVidReviewAvgRate(
+        //     video.id,
+        //   );
+        //   top5ReviewVidBox.push({
+        //     ...topVid,
+        //     rating: avgRating,
+        //   });
+        // }
         return Object.assign({
-          videoList: top5ReviewVidBox.slice(0, 4),
-          message: '유저의 리뷰가 없어서 메인페이지 top5 비디오리스트를 보냄',
+          videoList: [],
+          message: '유저의 리뷰가 없습니다',
         });
       }
 
