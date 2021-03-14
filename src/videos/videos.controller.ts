@@ -76,7 +76,7 @@ export class VideosController {
       }
       const userId = user.id;
       const videoList = await this.videosService.getUserVideo(userId);
-      if (!videoList || videoList.length !== 0) {
+      if (!videoList || videoList.length === 0) {
         const videoList3 = await this.videosService.getTop5ReviewVid();
         const top5ReviewVidBox = [];
         for (const video of videoList3) {
@@ -205,22 +205,17 @@ export class VideosController {
     });
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Post('add')
-  // async addVideo(@Body() body, @Request() req) {
-  //   const user = req.user;
-  //   const admin = await this.usersService.findUserWithName('admin');
-  //   delete admin.password;
-
-  //   if (user.id === admin.id && user.email === admin.email) {
-  //     return await this.videosService.addThisVideo(body);
-  //   } else {
-  //     throw new UnauthorizedException('허가되지 않은 사용자입니다.');
-  //   }
-  // }
-
+  @UseGuards(JwtAuthGuard)
   @Post('add')
-  async addVideo(@Body() body) {
-    return await this.videosService.addThisVideo(body);
+  async addVideo(@Body() body, @Request() req) {
+    const user = req.user;
+    const admin = await this.usersService.findUserWithName('admin');
+    delete admin.password;
+
+    if (user.id === admin.id && user.email === admin.email) {
+      return await this.videosService.addThisVideo(body);
+    } else {
+      throw new UnauthorizedException('허가되지 않은 사용자입니다.');
+    }
   }
 }

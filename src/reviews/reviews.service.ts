@@ -108,21 +108,6 @@ export class ReviewsService {
       .getOne();
   }
 
-  async test(id) {
-    const rawVideoList = await this.reviewRepository
-      .createQueryBuilder('review')
-      .select('*')
-      .addSelect('COUNT(*)', 'likeCount')
-      .where('reviewId = review.id')
-      .from(LikeReview, 'like')
-      .groupBy('review.id')
-      .orderBy('likeCount', 'DESC')
-      .getRawMany();
-
-    console.log(rawVideoList);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
   async findThisVidAndUserReview(video: any, user) {
     if (user === 'guest') {
       user = await this.userRepository.findOne({ name: 'guest' });
@@ -237,6 +222,9 @@ export class ReviewsService {
   }
 
   async deleteReview(id: number) {
+    const isReview = this.reviewRepository.find({ id });
+    if (!isReview)
+      throw new UnprocessableEntityException('해당 리뷰가 존재하지 않습니다.');
     await this.reviewRepository.delete({ id: id });
   }
 
@@ -267,7 +255,7 @@ export class ReviewsService {
         likeCount,
         isLike,
       },
-      message: '리뷰가 등록되었습니다.',
+      message: '리뷰가 수정되었습니다.',
     });
   }
 }
