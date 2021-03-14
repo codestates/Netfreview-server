@@ -10,10 +10,9 @@ export declare class ReviewsController {
     private usersService;
     constructor(reviewsService: ReviewsService, videosService: VideosService, tokenService: TokenService, usersService: UsersService);
     getReviewKing(): Promise<any>;
-    test(): Promise<void>;
     likeThisReview(body: any, req: any): Promise<any>;
     findThisVidReview(videoId: number, page: number, header: any): Promise<void>;
     saveReview(body: ReviewDto, request: any): Promise<void>;
-    deleteReview(body: any): Promise<void>;
+    deleteReview(body: any, req: any): Promise<string>;
     patchReview(body: ReviewDto, req: any): Promise<void>;
 }

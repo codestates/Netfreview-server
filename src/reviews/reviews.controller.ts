@@ -45,11 +45,6 @@ export class ReviewsController {
     });
   }
 
-  @Get('test')
-  async test() {
-    await this.reviewsService.test(1);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Post('like')
   async likeThisReview(@Body() body, @Request() req) {
@@ -125,8 +120,11 @@ export class ReviewsController {
 
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async deleteReview(@Body() body) {
+  async deleteReview(@Body() body, @Request() req) {
+    if (!body.reviewId)
+      throw new BadRequestException('reviewId가 전달되지 않았습니다.');
     await this.reviewsService.deleteReview(body.reviewId);
+    return '리뷰가 성공적으로 삭제 되었습니다.';
   }
 
   @UseGuards(JwtAuthGuard)
@@ -134,6 +132,7 @@ export class ReviewsController {
   async patchReview(@Body() body: ReviewDto, @Request() req): Promise<void> {
     const user = req.user;
     const video = await this.videosService.findVidWithId(body.videoId);
+    if (!video) throw new BadRequestException('해당 비디오가 없습니다.');
     return await this.reviewsService.patchReview(user, video, body);
   }
 }

@@ -40,9 +40,6 @@ let ReviewsController = class ReviewsController {
             video: kingData.video,
         });
     }
-    async test() {
-        await this.reviewsService.test(1);
-    }
     async likeThisReview(body, req) {
         const user = req.user;
         const review = await this.reviewsService.findReviewWithId(body.reviewId);
@@ -92,12 +89,17 @@ let ReviewsController = class ReviewsController {
         const video = await this.videosService.findVidWithId(body.videoId);
         return await this.reviewsService.saveReview(user, video, body);
     }
-    async deleteReview(body) {
+    async deleteReview(body, req) {
+        if (!body.reviewId)
+            throw new common_1.BadRequestException('reviewId가 전달되지 않았습니다.');
         await this.reviewsService.deleteReview(body.reviewId);
+        return '리뷰가 성공적으로 삭제 되었습니다.';
     }
     async patchReview(body, req) {
         const user = req.user;
         const video = await this.videosService.findVidWithId(body.videoId);
+        if (!video)
+            throw new common_1.BadRequestException('해당 비디오가 없습니다.');
         return await this.reviewsService.patchReview(user, video, body);
     }
 };
@@ -107,12 +109,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ReviewsController.prototype, "getReviewKing", null);
-__decorate([
-    common_1.Get('test'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], ReviewsController.prototype, "test", null);
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Post('like'),
@@ -141,9 +137,9 @@ __decorate([
 __decorate([
     common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
     common_1.Delete(),
-    __param(0, common_1.Body()),
+    __param(0, common_1.Body()), __param(1, common_1.Request()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ReviewsController.prototype, "deleteReview", null);
 __decorate([

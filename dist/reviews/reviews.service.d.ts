@@ -14,7 +14,6 @@ export declare class ReviewsService {
     getThisVidReviewAvgRate(videoId: number): Promise<number>;
     addOrRemoveLike(user: User, review: Review): Promise<any>;
     findReviewWithId(reviewId: number): Promise<Review>;
-    test(id: any): Promise<void>;
     findThisVidAndUserReview(video: any, user: any): Promise<{
         videoList: any[];
         userReview: any;

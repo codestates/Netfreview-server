@@ -82,7 +82,6 @@ let UsersController = class UsersController {
         return Object.assign(Object.assign(Object.assign({}, user), { videoList }));
     }
     async refresh(req) {
-        console.log(req.cookies);
         const { refreshToken } = req.cookies;
         const { token } = await this.tokenService.createAccessTokenFromRefreshToken(refreshToken);
         return {
@@ -118,6 +117,8 @@ let UsersController = class UsersController {
         if (isUser)
             throw new common_1.ConflictException('닉네임이 중복됩니다.');
         const userinfo = await this.usersService.updateUserInfo(user, payload);
+        delete userinfo.email;
+        delete userinfo.password;
         return Object.assign({
             user: userinfo,
             message: '회원정보가 수정되었습니다.',

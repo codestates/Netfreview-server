@@ -98,18 +98,6 @@ let ReviewsService = class ReviewsService {
             .leftJoinAndSelect('review.user', 'user')
             .getOne();
     }
-    async test(id) {
-        const rawVideoList = await this.reviewRepository
-            .createQueryBuilder('review')
-            .select('*')
-            .addSelect('COUNT(*)', 'likeCount')
-            .where('reviewId = review.id')
-            .from(LikeReview_entity_1.LikeReview, 'like')
-            .groupBy('review.id')
-            .orderBy('likeCount', 'DESC')
-            .getRawMany();
-        console.log(rawVideoList);
-    }
     async findThisVidAndUserReview(video, user) {
         if (user === 'guest') {
             user = await this.userRepository.findOne({ name: 'guest' });
@@ -185,6 +173,9 @@ let ReviewsService = class ReviewsService {
         }
     }
     async deleteReview(id) {
+        const isReview = this.reviewRepository.find({ id });
+        if (!isReview)
+            throw new common_1.UnprocessableEntityException('해당 리뷰가 존재하지 않습니다.');
         await this.reviewRepository.delete({ id: id });
     }
     async patchReview(user, video, req) {
@@ -209,7 +200,7 @@ let ReviewsService = class ReviewsService {
         return Object.assign({
             myReview: Object.assign(Object.assign({}, thisreview), { likeCount,
                 isLike }),
-            message: '리뷰가 등록되었습니다.',
+            message: '리뷰가 수정되었습니다.',
         });
     }
 };
