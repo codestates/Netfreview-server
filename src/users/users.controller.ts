@@ -152,10 +152,12 @@ export class UsersController {
   @Patch()
   async updateUserInfo(@Request() req, @Body() payload): Promise<string> {
     const { user } = req;
-    const isUser = await this.usersService.findUserWithNickname(
-      payload.nickname,
-    );
-    if (isUser) throw new ConflictException('닉네임이 중복됩니다.');
+    if (payload.nickname && payload.nickname !== user.nickname) {
+      const isUser = await this.usersService.findUserWithNickname(
+        payload.nickname,
+      );
+      if (isUser) throw new ConflictException('닉네임이 중복됩니다.');
+    }
     const userinfo = await this.usersService.updateUserInfo(user, payload);
     delete userinfo.email;
     delete userinfo.password;
